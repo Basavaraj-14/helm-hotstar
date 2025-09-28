@@ -29,4 +29,4 @@ jobs:
 
       - name: deploy to deploy-to-k8s
         run: |
-          helm upgrade --install hotstar-webapp ./hotstar -f ./hotstar/values.yaml
+          helm install hotstar-webapp ./hotstar -f ./hotstar/values.yaml
