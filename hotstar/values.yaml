@@ -1,0 +1,4 @@
+appName: my-webapp
+image:
+  repository: basavaraj1234/hotstar
+  tag: latest
