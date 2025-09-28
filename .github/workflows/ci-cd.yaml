@@ -1,1 +1,31 @@
+name: build-deploy
+on:
+  push:
+    branches:
+      - main
 
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout-sourcecode
+        uses: actions/checkout@v3
+
+      - name: login-to-docker-hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+
+      - name: aws-actions/configure-aws-credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
+
+      - name: update-kubeconfig
+        run: aws eks update-kubeconfig --name my-eks-cluster --region ap-south-1
+
+      - name: deploy to deploy-to-k8s
+        run: |
+          helm install hotstar-webapp ./hotstar -f ./hotstar/values.yaml
